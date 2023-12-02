@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gallery/login.dart';
+import 'package:flutter_gallery/demo.dart';
+import 'package:flutter_gallery/democode.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         appBarTheme: const AppBarTheme(centerTitle: true),
       ),
-      home: HomePage(),
+      home: ImageTest(),
     );
   }
 }

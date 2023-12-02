@@ -1,100 +1,69 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 
-class IndexedImage {
-  int index;
-  XFile? imageFile; // Use XFile from image_picker package
-
-  IndexedImage({required this.index, this.imageFile});
+class CardModel {
+  List<String> images = [];
 }
 
-class ImageUploadWidget extends StatefulWidget {
-  @override
-  _ImageUploadWidgetState createState() => _ImageUploadWidgetState();
-}
+// ignore: must_be_immutable
+class CardList extends StatelessWidget {
+  List<CardModel>? cards = List.generate(10, (index) => CardModel());
 
-class _ImageUploadWidgetState extends State<ImageUploadWidget> {
-  List<IndexedImage> indexedImages = [];
-
-  Future<void> _pickImage(int index) async {
-    final imagePicker = ImagePicker();
-    XFile? image = await imagePicker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      setState(() {
-        indexedImages.add(IndexedImage(index: index, imageFile: image));
-      });
-    }
-  }
-
-  Future<void> _uploadImages() async {
-    // Replace with your server endpoint for image upload
-    final String uploadUrl = 'https://your-api-endpoint.com/upload';
-
-    for (IndexedImage indexedImage in indexedImages) {
-      if (indexedImage.imageFile != null) {
-        var request = http.MultipartRequest('POST', Uri.parse(uploadUrl));
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'image',
-            indexedImage.imageFile!.path,
-          ),
-        );
-        request.fields['index'] = indexedImage.index.toString();
-
-        try {
-          final response = await request.send();
-          if (response.statusCode == 200) {
-            print(
-                'Image uploaded successfully for index ${indexedImage.index}');
-          } else {
-            print('Failed to upload image for index ${indexedImage.index}');
-          }
-        } catch (error) {
-          print('Error uploading image: $error');
-        }
-      }
-    }
-  }
+  CardList({this.cards});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Image Upload'),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return ListView.builder(
+      itemCount: cards!.length,
+      itemBuilder: (context, index) {
+        return CardWidget(card: cards![index]);
+      },
+    );
+  }
+}
+
+class CardWidget extends StatefulWidget {
+  final CardModel card;
+
+  CardWidget({required this.card});
+
+  @override
+  _CardWidgetState createState() => _CardWidgetState();
+}
+
+class _CardWidgetState extends State<CardWidget> {
+  List<String> images = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
         children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount:
-                  10, // Replace with the total number of indices you want
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text('Index $index'),
-                  trailing: IconButton(
-                    icon: Icon(Icons.upload),
-                    onPressed: () => _pickImage(index),
-                  ),
-                );
-              },
-            ),
-          ),
+          // Display existing images
+          for (var image in widget.card.images) Image.network(image),
+
+          // Upload Image Button
           ElevatedButton(
-            onPressed: _uploadImages,
-            child: Text('Upload Images'),
+            onPressed: () {
+              _showImagePicker(context);
+            },
+            child: const Text('Upload Image'),
           ),
         ],
       ),
     );
   }
-}
 
-void main() {
-  runApp(MaterialApp(
-    home: ImageUploadWidget(),
-  ));
+  void _showImagePicker(BuildContext context) async {
+    final picker = ImagePicker();
+    final pickedFiles = await picker.pickMultiImage();
+
+    if (pickedFiles != null) {
+      // Update the 'images' list with the selected images
+      setState(() {
+        widget.card.images
+            .addAll(pickedFiles.map((file) => file.path).toList());
+      });
+    }
+  }
 }
