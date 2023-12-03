@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gallery/demo.dart';
-import 'package:flutter_gallery/democode.dart';
+import 'package:flutter_gallery/index_wise_image_upload.dart';
 
 void main() {
   runApp(const MyApp());
