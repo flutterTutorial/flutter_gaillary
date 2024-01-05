@@ -14,6 +14,7 @@ class _YourOtherPageState extends State<YourOtherPage> {
   bool _suffixIcon = false, _isLoading = false;
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text('Other Page'),
@@ -22,15 +23,17 @@ class _YourOtherPageState extends State<YourOtherPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(
+            TextFormField(
           textAlignVertical: TextAlignVertical.center,
           controller: _mobileController,
           cursorColor: MyColors.toolDark,
           style: GoogleFonts.roboto(
             color: MyColors.textcolor,
             fontWeight: FontWeight.w600,
+            letterSpacing: screenWidth*0.05,
             fontSize: 16.0,
           ),
+          
           onChanged: (value) {
             setState(() {
               if (value.length == 10) {
@@ -45,12 +48,12 @@ class _YourOtherPageState extends State<YourOtherPage> {
           decoration: InputDecoration(
             counterText: '',
             fillColor: MyColors.textfiledbg,
-            border: InputBorder.none,
-            errorBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            focusedErrorBorder: InputBorder.none,
+            // border: InputBorder.none,
+            // errorBorder: InputBorder.none,
+            // enabledBorder: InputBorder.none,
+            // disabledBorder: InputBorder.none,
+            // focusedBorder: InputBorder.none,
+            // focusedErrorBorder: InputBorder.none,
             icon: Icon(
               Icons.smartphone_rounded,
               color: MyColors.textcolor,
