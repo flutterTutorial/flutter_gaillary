@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gallery/autoscroll.dart';
-import 'package:flutter_gallery/demo.dart';
-
+import 'package:flutter_gallery/provider/testprovider.dart';
+import 'package:flutter_gallery/screen/demo33.dart';
+import 'package:provider/provider.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(
+      MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => OTPProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +25,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AutoScrollPage(),
+      home:  YourOtherPage(),
     );
   }
 }

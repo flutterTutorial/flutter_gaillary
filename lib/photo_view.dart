@@ -6,7 +6,7 @@ import 'package:photo_view/photo_view_gallery.dart';
 class ViewPhotos extends StatefulWidget {
   final String heroTitle;
   final imageIndex;
-  final List<PhotosModel> imageList;
+  final List imageList;
   ViewPhotos(
       {this.imageIndex, required this.imageList, this.heroTitle = "img"});
 

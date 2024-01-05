@@ -1,4 +1,4 @@
-package com.example.photo_view
+package com.example.flutter_gallery
 
 import io.flutter.embedding.android.FlutterActivity
 
