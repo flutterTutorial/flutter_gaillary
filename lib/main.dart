@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gallery/notificationservice/local_notification_service.dart';
 import 'package:flutter_gallery/provider/testprovider.dart';
 import 'package:flutter_gallery/screen/homedemo.dart';
+import 'package:flutter_gallery/screen/screen_stack.dart';
 import 'package:provider/provider.dart';
 
 
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  HomeScreenDemo(),
+      home:  AttendanceS(),
     );
   }
 }
