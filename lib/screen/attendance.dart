@@ -13,12 +13,9 @@ class DemoTest extends StatefulWidget {
 }
 
 class _DemoTestState extends State<DemoTest> {
-  DateTime today = DateTime.now();
-  void onDaySelected(DateTime day, DateTime focusedDay) {
-    setState(() {
-      today = day;
-    });
-  }
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
 
   List<Map<String, dynamic>> attendant = [
     {"id": 27806, "date": "2024-01-01", "remarks": "", "attendance_status": 4},
@@ -49,11 +46,12 @@ class _DemoTestState extends State<DemoTest> {
     {"id": 28529, "date": "2024-01-25", "remarks": "", "attendance_status": 3}
   ];
 
-@override
+  @override
   void initState() {
-    Provider.of<OTPProvider>(context,listen: false).getAtten();
+    Provider.of<OTPProvider>(context, listen: false).getAtten("2024-01-01");
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -75,17 +73,45 @@ class _DemoTestState extends State<DemoTest> {
                 return attenPro.isLoading == true
                     ? const CircularProgressIndicator()
                     : TableCalendar(
-                        locale: "en_US",
-                        rowHeight: 50,
-                        headerStyle: const HeaderStyle(
-                            formatButtonVisible: false, titleCentered: true),
-                        availableGestures: AvailableGestures.none,
-                        selectedDayPredicate: (day) => isSameDay(day, today),
-                        focusedDay: today,
                         firstDay: DateTime(1948),
                         lastDay: DateTime(2100),
-                        onDaySelected: onDaySelected,
-                        calendarBuilders: CalendarBuilders(
+                        focusedDay: _focusedDay,
+                        calendarFormat: _calendarFormat,
+                        selectedDayPredicate: (day) {
+                          // Use `selectedDayPredicate` to determine which day is currently selected.
+                          // If this returns true, then `day` will be marked as selected.
+
+                          // Using `isSameDay` is recommended to disregard
+                          // the time-part of compared DateTime objects.
+                          return isSameDay(_selectedDay, day);
+                        },
+                         headerStyle: const HeaderStyle(
+                            formatButtonVisible: false, titleCentered: true),
+                        onDaySelected: (selectedDay, focusedDay) {
+                          if (!isSameDay(_selectedDay, selectedDay)) {
+                            // Call `setState()` when updating the selected day
+                            setState(() {
+                              _selectedDay = selectedDay;
+                              _focusedDay = focusedDay;
+                            });
+                          }
+                        },
+                        onFormatChanged: (format) {
+                          if (_calendarFormat != format) {
+                            // Call `setState()` when updating calendar format
+                            setState(() {
+                              _calendarFormat = format;
+                            });
+                          }
+                        },
+                        onPageChanged: (focusedDay) {
+                          // No need to call `setState()` here
+                          _focusedDay = focusedDay;
+                          attenPro.getAtten("2024-02-02");
+
+                        },
+
+                         calendarBuilders: CalendarBuilders(
                           defaultBuilder: (context, day, focusedDay) {
                             // Check if attendanceModel and data are not null
                             if (attenPro.attendanceModel != null &&
@@ -96,15 +122,13 @@ class _DemoTestState extends State<DemoTest> {
                                   return Container(
                                     height: 40.0,
                                     decoration: BoxDecoration(
-                                      color: _getStatusColor(
-                                          d.attendanceStatus!),
+                                      color:
+                                          _getStatusColor(d.attendanceStatus!),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Center(
                                       child: Text(
                                         '${day.day}',
-                                        style: const TextStyle(
-                                            color: Colors.white),
                                       ),
                                     ),
                                   );
@@ -116,6 +140,25 @@ class _DemoTestState extends State<DemoTest> {
                         ),
                       );
               },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Consumer<OTPProvider>(
+                builder: (context, countPro, child) {
+                  return Row(
+                    children: [
+                      Expanded(
+                          child: Text(countPro.attenCount.isNotEmpty
+                              ? countPro.attenCount[1].toString()
+                              : "0")),
+                      Expanded(
+                          child: Text(countPro.attenCount.isNotEmpty
+                              ? countPro.attenCount[2].toString()
+                              : "0")),
+                    ],
+                  );
+                },
+              ),
             )
           ],
         ),
