@@ -87,15 +87,15 @@ class _DemoTestState extends State<DemoTest> {
                         // },
                          headerStyle: const HeaderStyle(
                             formatButtonVisible: false, titleCentered: true),
-                        // onDaySelected: (selectedDay, focusedDay) {
-                        //   if (!isSameDay(_selectedDay, selectedDay)) {
-                        //     // Call `setState()` when updating the selected day
-                        //     setState(() {
-                        //       _selectedDay = selectedDay;
-                        //       _focusedDay = focusedDay;
-                        //     });
-                        //   }
-                        // },
+                        onDaySelected: (selectedDay, focusedDay) {
+                          if (!isSameDay(_selectedDay, selectedDay)) {
+                            // Call `setState()` when updating the selected day
+                            setState(() {
+                              _selectedDay = selectedDay;
+                              _focusedDay = focusedDay;
+                            });
+                          }
+                        },
                         // onFormatChanged: (format) {
                         //   if (_calendarFormat != format) {
                         //     // Call `setState()` when updating calendar format
@@ -104,6 +104,18 @@ class _DemoTestState extends State<DemoTest> {
                         //     });
                         //   }
                         // },
+                        calendarStyle:  CalendarStyle(
+                          selectedDecoration:const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          todayDecoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:  Colors.white                   
+                               ),
+                               todayTextStyle:const TextStyle(
+                              color:  Colors.black,
+                        ),
+                        ),
                         onPageChanged: (focusedDay) {
                           // No need to call `setState()` here
                           _focusedDay = focusedDay;
