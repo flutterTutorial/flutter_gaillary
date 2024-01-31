@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gallery/screen/sts2.dart';
+import 'package:flutter_gallery/screen/story_example.dart';
 import 'package:story_view/story_view.dart';
 import 'package:rxdart/rxdart.dart';
 
