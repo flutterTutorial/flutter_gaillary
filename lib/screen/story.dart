@@ -1,20 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gallery/screen/sts2.dart';
 import 'package:story_view/story_view.dart';
+import 'package:rxdart/rxdart.dart';
 
-class StoryPage extends StatelessWidget {
-  StoryPage({super.key});
+class StoryPage extends StatefulWidget {
+  const StoryPage({super.key});
+
+  @override
+  State<StoryPage> createState() => _StoryPageState();
+}
+
+class _StoryPageState extends State<StoryPage> {
   final StoryController controller = StoryController();
+
+  final playbackNotifier = BehaviorSubject<PlaybackState>();
+
+  List<StoryItem> stories = [];
+
+  List<String> storiesData = [
+    "https://i.pinimg.com/originals/f6/eb/53/f6eb535411056b553dfdec1665387c0c.jpg",
+    "https://image.ibb.co/cU4WGx/Omotuo-Groundnut-Soup-braperucci-com-1.jpg",
+    "https://image.ibb.co/cU4WGx/Omotuo-Groundnut-Soup-braperucci-com-1.jpg",
+    "https://media.giphy.com/media/XcA8krYsrEAYXKf4UQ/giphy.gif"
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    for (int i = 0; i < storiesData.length; i++) {
+      setState(() {
+        stories.add(
+          StoryItem.pageImage(
+            controller: controller,
+            url: storiesData[i],
+            caption: "Simply beautiful😘😘😘",
+          ),
+        );
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Delicious Ghanaian Meals"),
-        // actions: [
-        //   IconButton(onPressed: () {
-        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-        //   }, icon:const Icon(Icons.abc))
-        // ],
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const StoryExamplePage()));
+              },
+              icon: const Icon(Icons.abc))
+        ],
       ),
       body: Container(
         margin: const EdgeInsets.all(
@@ -26,95 +64,50 @@ class StoryPage extends StatelessWidget {
               height: 300,
               child: StoryView(
                 controller: controller,
-                storyItems: [
-                  StoryItem.text(
-                    title:
-                        "Hello world!\nHave a look at some great Ghanaian delicacies. I'm sorry if your mouth waters. \n\nTap!",
-                    backgroundColor: Colors.orange,
-                    roundedTop: true,
-                  ),
-                  // StoryItem.inlineImage(
-                  //   // NetworkImage(
-                  //   //     "https://image.ibb.co/gCZFbx/Banku-and-tilapia.jpg"),
-                  //   caption: Text(
-                  //     "Banku & Tilapia. The food to keep you charged whole day.\n#1 Local food.",
-                  //     style: TextStyle(
-                  //       color: Colors.white,
-                  //       backgroundColor: Colors.black54,
-                  //       fontSize: 17,
-                  //     ),
-                  //   ), url: 'https://image.ibb.co/gCZFbx/Banku-and-tilapia.jpg',
-                  //   controller: controller,
-                  // ),
-                  StoryItem.inlineImage(
-                    url:
-                        "https://image.ibb.co/cU4WGx/Omotuo-Groundnut-Soup-braperucci-com-1.jpg",
-                    controller: controller,
-                    caption: const Text(
-                      "Omotuo & Nkatekwan; You will love this meal if taken as supper.",
-                      style: TextStyle(
-                        color: Colors.white,
-                        backgroundColor: Colors.black54,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                  StoryItem.inlineImage(
-                    url:
-                        "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif",
-                    controller: controller,
-                    caption: const Text(
-                      "Hektas, sektas and skatad",
-                      style: TextStyle(
-                        color: Colors.white,
-                        backgroundColor: Colors.black54,
-                        fontSize: 17,
-                      ),
-                    ),
-                  )
-                ],
+                storyItems: stories,
                 onStoryShow: (s) {
                   print("Showing a story");
                 },
                 onComplete: () {
                   print("Completed a cycle");
+                  Navigator.pop(context);
                 },
                 progressPosition: ProgressPosition.bottom,
                 repeat: false,
                 inline: true,
               ),
             ),
-            Material(
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => MoreStories()));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(8))),
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Text(
-                        "View more stories",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // Material(
+            //   child: InkWell(
+            //     onTap: () {
+            //       Navigator.of(context).push(
+            //           MaterialPageRoute(builder: (context) => MoreStories()));
+            //     },
+            //     child: Container(
+            //       decoration:const BoxDecoration(
+            //           color: Colors.black54,
+            //           borderRadius:
+            //               BorderRadius.vertical(bottom: Radius.circular(8))),
+            //       padding:const EdgeInsets.symmetric(vertical: 8),
+            //       child: const Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: <Widget>[
+            //           Icon(
+            //             Icons.arrow_forward,
+            //             color: Colors.white,
+            //           ),
+            //           SizedBox(
+            //             width: 16,
+            //           ),
+            //           Text(
+            //             "View more stories",
+            //             style: TextStyle(fontSize: 16, color: Colors.white),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

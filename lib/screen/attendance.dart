@@ -104,18 +104,16 @@ class _DemoTestState extends State<DemoTest> {
                         //     });
                         //   }
                         // },
-                        calendarStyle:  CalendarStyle(
-                          selectedDecoration:const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          todayDecoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:  Colors.white                   
-                               ),
-                               todayTextStyle:const TextStyle(
-                              color:  Colors.black,
-                        ),
-                        ),
+                        // calendarStyle:  CalendarStyle(
+                         
+                        //   todayDecoration: BoxDecoration(
+                        //     shape: BoxShape.circle,
+                        //     color: _getStatusColor(2)                  
+                        //        ),
+                        // //        todayTextStyle: TextStyle(
+                        // //       color:  Colors.black,
+                        // // ),
+                        // ),
                         onPageChanged: (focusedDay) {
                           // No need to call `setState()` here
                           _focusedDay = focusedDay;
@@ -124,7 +122,28 @@ class _DemoTestState extends State<DemoTest> {
                         },
 
                          calendarBuilders: CalendarBuilders(
+                          todayBuilder: (context, day, focusedDay) {
+                             for (Data dd in attenPro.attendanceModel!.data!) {
+                              DateTime date = DateTime.parse(dd.date!);
+                              if (isSameDay(day, date)) {
+                                return Container(
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: _getStatusColor(dd.attendanceStatus!),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '${day.day}',
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                            return null;
+                          },
                           defaultBuilder: (context, day, focusedDay) {
+                          
                             // Check if attendanceModel and data are not null
                             if (attenPro.attendanceModel != null &&
                                 attenPro.attendanceModel!.data != null) {
@@ -164,7 +183,7 @@ class _DemoTestState extends State<DemoTest> {
                               ? countPro.attenCount[1].toString()
                               : "0")),
                       Expanded(
-                          child: Text(countPro.attenCount.isNotEmpty
+                          child: Text(countPro.attenCount[2] != null
                               ? countPro.attenCount[2].toString()
                               : "0")),
                     ],
