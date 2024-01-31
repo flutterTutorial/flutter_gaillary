@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gallery/autoscroll.dart';
 import 'package:flutter_gallery/notificationservice/local_notification_service.dart';
 import 'package:flutter_gallery/provider/testprovider.dart';
 import 'package:flutter_gallery/screen/attendance.dart';
+import 'package:flutter_gallery/screen/customstory.dart';
 import 'package:provider/provider.dart';
 
 
