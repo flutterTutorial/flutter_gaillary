@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gallery/screen/share.dart';
+import 'package:flutter_gallery/screen/download_logic.dart';
 
 
 class DownloadFileTest extends StatefulWidget {
@@ -27,7 +27,7 @@ class _DownloadFileTestState extends State<DownloadFileTest> {
         body: Center(
           child: ElevatedButton(
               onPressed: () async {
-                Navigator.push(context, MaterialPageRoute(builder: ((context) => ShareTest())));
+                // Navigator.push(context, MaterialPageRoute(builder: ((context) => ShareTest())));
                 // _flutterMediaDownloaderPlugin.downloadMedia(context,
                 //     'https://www.kasandbox.org/programming-images/avatars/spunky-sam-green.png');
               },
